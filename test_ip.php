@@ -40,11 +40,10 @@ function isRuIp($ip, $fileName, $blockSize)
 
     $blockNumber = (int)floor((float)$ipInt / $bitsPerBlock);
     $blockOffset = $ipInt - $blockNumber * $bitsPerBlock;
-
     $byteNumber = (int)floor((float)$blockOffset / 8);
-    $byteOffset = $blockOffset - $byteNumber * 8;
+    $bitNumber = $blockOffset - $byteNumber * 8;
 
-    echo $ip . ' ' . $ipInt . ' ' . $blockNumber . ' ' . $blockOffset . ' ' . $byteNumber . ' ' . $byteOffset . PHP_EOL;
+    echo $ip . ' ' . $ipInt . ' ' . $blockNumber . ' ' . $byteNumber . ' ' . $bitNumber . PHP_EOL;
 
     if (fseek($fd, $blockNumber * $blockSize) === -1) {
         fclose( $fd );
@@ -68,7 +67,7 @@ function isRuIp($ip, $fileName, $blockSize)
 
     $byte = unpack('C', $blockData[$byteNumber])[1];
 
-    return ($byte & (1 << $byteOffset));
+    return ($byte & (1 << $bitNumber));
 }
 
 if ($argc > 1) {
